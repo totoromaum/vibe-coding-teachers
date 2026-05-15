@@ -26,25 +26,31 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
+        const { useState, useEffect } = React;
 
         // 아이콘 컴포넌트
         const Icon = ({ name, className }) => <i className={`${name} ${className}`}></i>;
 
         const Header = () => {
             const [imgError, setImgError] = useState(false);
+            
+            // 깃허브 페이지 배포 경로를 고려한 상대 경로 최적화
+            const logoPath = "./images/logo.png";
 
             return (
                 <header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
                     <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
                         <div className="flex items-center gap-3 text-blue-700 font-bold text-xl tracking-tight">
-                            {/* 로고 이미지 처리 최적화 */}
                             {!imgError ? (
                                 <img 
-                                    src="images/logo.png" 
+                                    src={logoPath}
                                     alt="오션중학교 로고" 
                                     className="h-10 w-auto object-contain"
-                                    onError={() => setImgError(true)}
+                                    style={{ display: 'block', minWidth: '40px' }}
+                                    onError={(e) => {
+                                        console.log("Logo load failed, switching to icon");
+                                        setImgError(true);
+                                    }}
                                 />
                             ) : (
                                 <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-sm">
@@ -229,7 +235,7 @@
                     <div className="max-w-6xl mx-auto px-4 flex flex-col items-center">
                         {!imgError ? (
                             <img 
-                                src="images/logo.png" 
+                                src="./images/logo.png" 
                                 alt="오션중학교 로고" 
                                 className="h-12 w-auto mb-4 grayscale opacity-70"
                                 onError={() => setImgError(true)}
