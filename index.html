@@ -3,154 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>교사용 상담 신청 시스템</title>
+    <title>오션중학교 바이브 코딩 허브</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f0f4f8; }
-        .glass-card {
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap');
+        body { font-family: 'Pretendard', sans-serif; }
+        .animate-blob { animation: blob 7s infinite; }
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
         }
-        .left-panel {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-        }
-        input, select, textarea {
-            background-color: #f8fafc !important;
-            border: 1px solid #e2e8f0 !important;
-            transition: all 0.2s;
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: #2563eb !important;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
+        .animation-delay-2000 { animation-delay: 2s; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body>
+    <div id="root"></div>
 
-    <div class="glass-card w-full max-w-4xl flex flex-col md:flex-row">
-        <!-- 왼쪽 정보 패널 -->
-        <div class="left-panel md:w-2/5 p-8 md:p-12 text-white flex flex-col justify-between">
-            <div>
-                <h1 class="text-3xl font-bold mb-6">교사 상담 신청</h1>
-                <p class="text-blue-100 leading-relaxed mb-10">
-                    교육 과정, 협력 수업, 행정 업무 등 공유하고 싶은 내용이나 상담이 필요한 사항이 있다면 언제든 편하게 메시지를 남겨주세요.
-                </p>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-                <div class="space-y-6">
-                    <div class="flex items-center space-x-4">
-                        <div class="bg-blue-500/30 p-3 rounded-full">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <span>1층 교무실</span>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <div class="bg-blue-500/30 p-3 rounded-full">
-                            <i class="far fa-clock"></i>
-                        </div>
-                        <span>공강 시간 및 퇴근 전 방문 환영</span>
-                    </div>
-                </div>
-            </div>
+        // 아이콘 컴포넌트
+        const Icon = ({ name, className }) => <i className={`${name} ${className}`}></i>;
 
-            <div class="mt-12 flex space-x-4 opacity-50">
-                <i class="fab fa-python text-2xl"></i>
-                <i class="fab fa-html5 text-2xl"></i>
-            </div>
-        </div>
-
-        <!-- 오른쪽 입력 폼 -->
-        <div class="md:w-3/5 p-8 md:p-12 bg-white">
-            <form id="consultationForm" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">소속 학교</label>
-                        <input type="text" name="school" placeholder="예: 오션중학교" required
-                            class="w-full px-4 py-3 rounded-xl">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">성함</label>
-                        <input type="text" name="name" placeholder="김교사" required
-                            class="w-full px-4 py-3 rounded-xl">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">담당 과목</label>
-                    <input type="text" name="subject" placeholder="예: 정보/컴퓨터" required
-                        class="w-full px-4 py-3 rounded-xl">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">상담 구분</label>
-                    <select name="type" class="w-full px-4 py-3 rounded-xl appearance-none">
-                        <option value="교과 협의">교과 협의</option>
-                        <option value="생활 지도 공유">생활 지도 공유</option>
-                        <option value="에듀테크 활용">에듀테크 활용</option>
-                        <option value="기타 상담" selected>기타 상담</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">상담 내용</label>
-                    <textarea name="content" rows="4" placeholder="궁금한 내용이나 의논하고 싶은 내용을 자유롭게 적어주세요." required
-                        class="w-full px-4 py-3 rounded-xl resize-none"></textarea>
-                </div>
-
-                <button type="submit" id="submitBtn"
-                    class="w-full bg-[#0f172a] text-white font-bold py-4 rounded-xl hover:bg-black transition-colors flex items-center justify-center space-x-2">
-                    <span>메시지 보내기</span>
-                </button>
-            </form>
+        const Header = () => {
+            const [imgError, setImgError] = useState(false);
             
-            <!-- 로딩 및 결과 메시지 -->
-            <div id="statusMessage" class="hidden mt-4 p-4 rounded-xl text-center font-medium"></div>
-        </div>
-    </div>
+            // 깃허브 페이지 배포 경로를 고려한 상대 경로 최적화
+            const logoPath = "./images/logo.png";
 
-    <script>
-        const form = document.getElementById('consultationForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const statusMsg = document.getElementById('statusMessage');
-        const REDIRECT_URL = "https://script.google.com/macros/s/AKfycbVpldAkyzOrPVwa9yDx1NAaSLLQ9t6T_y2J6i0WUz1owXxI6OW7Wp9n1o4oKm_PmY/exec";
+            return (
+                <header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
+                    <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                            {/* 로고 이미지 표시 (텍스트 삭제됨) */}
+                            {!imgError ? (
+                                <img 
+                                    src={logoPath}
+                                    alt="오션중학교 로고" 
+                                    className="h-12 w-auto object-contain"
+                                    style={{ display: 'block' }}
+                                    onError={(e) => {
+                                        console.log("Logo load failed, switching to icon");
+                                        setImgError(true);
+                                    }}
+                                />
+                            ) : (
+                                <div className="flex items-center gap-2 text-blue-700 font-bold text-xl tracking-tight">
+                                    <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-sm">
+                                        <Icon name="fa-solid fa-school" className="text-xl" />
+                                    </div>
+                                    <span className="text-gray-900">오션중학교</span>
+                                </div>
+                            )}
+                        </div>
+                        <nav className="hidden md:flex gap-6 text-gray-600 font-medium">
+                            <a href="#about" className="hover:text-blue-600 transition-colors">바이브 코딩이란?</a>
+                            <a href="#benefits" className="hover:text-blue-600 transition-colors">선생님을 위한 혜택</a>
+                            <a href="#examples" className="hover:text-blue-600 transition-colors">활용 사례</a>
+                        </nav>
+                        <button className="bg-blue-600 text-white px-5 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors shadow-sm">
+                            시작하기
+                        </button>
+                    </div>
+                </header>
+            );
+        };
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // UI 상태 변경 (로딩 중)
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner animate-spin"></i> <span>전송 중...</span>';
-            statusMsg.className = "mt-4 p-4 rounded-xl text-center font-medium bg-gray-100 text-gray-600";
-            statusMsg.textContent = "상담 내용을 저장하고 있습니다.";
-            statusMsg.classList.remove('hidden');
+        const Hero = () => {
+            const handleAskClick = () => {
+                window.open("https://script.google.com/macros/s/AKfycbxVpldAkyzOrPVwa9yDx1NAaSLLQ9t6T_y2J6i0WUz1owXxI6OW7Wp9n1o4oKm_PmY/exec", "_blank");
+            };
 
-            // 폼 데이터 객체화
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            // google.script.run을 사용하여 서버 측 함수 직접 호출
-            google.script.run
-                .withSuccessHandler(() => {
-                    statusMsg.className = "mt-4 p-4 rounded-xl text-center font-medium bg-green-100 text-green-700";
-                    statusMsg.textContent = "성공적으로 접수되었습니다. 곧 페이지가 이동합니다.";
+            return (
+                <section className="relative pt-24 pb-32 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+                    <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+                    <div className="absolute top-0 left-0 mt-20 -ml-20 w-80 h-80 bg-cyan-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
                     
-                    // 지정된 URL로 리다이렉트
-                    setTimeout(() => {
-                        window.top.location.href = REDIRECT_URL;
-                    }, 1000);
-                })
-                .withFailureHandler((err) => {
-                    statusMsg.className = "mt-4 p-4 rounded-xl text-center font-medium bg-red-100 text-red-700";
-                    statusMsg.textContent = "오류가 발생했습니다: " + err;
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<span>메시지 보내기</span>';
-                })
-                .processForm(data); // 서버 측 processForm 함수 호출
-        });
+                    <div className="max-w-6xl mx-auto px-4 relative z-10 text-center">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-800 font-semibold text-sm mb-6">
+                            <Icon name="fa-solid fa-sparkles" />
+                            <span>오션중학교 교감선생님이 제안하는 새로운 교육의 물결</span>
+                        </div>
+                        <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight mb-8 leading-tight">
+                            코딩을 몰라도 괜찮습니다. <br/>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">
+                                선생님님의 상상력이 곧 프로그램이 됩니다.
+                            </span>
+                        </h1>
+                        <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                            복잡한 컴퓨터 언어 대신, 우리가 일상적으로 쓰는 '말'로 AI와 대화하며 나만의 맞춤형 교구와 업무 자동화 툴을 만드는 <b>바이브 코딩(Vibe Coding)</b>의 세계로 선생님들을 초대합니다.
+                        </p>
+                        <div className="flex flex-col sm:flex-row justify-center gap-4">
+                            <button className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center justify-center gap-2 order-1 sm:order-none">
+                                연수 자료실 입장하기 <Icon name="fa-solid fa-arrow-right" />
+                            </button>
+                            <div className="flex gap-2 flex-1 sm:flex-none">
+                                <button className="flex-1 sm:flex-none bg-white text-blue-700 border-2 border-blue-100 px-6 py-4 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all">
+                                    첫 프롬프트 작성하기
+                                </button>
+                                <button 
+                                    onClick={handleAskClick}
+                                    className="flex-1 sm:flex-none bg-cyan-500 text-white px-6 py-4 rounded-xl font-bold text-lg hover:bg-cyan-600 transition-all flex items-center justify-center gap-2 shadow-md"
+                                >
+                                    <Icon name="fa-solid fa-comment-dots" />
+                                    질문하기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const About = () => (
+            <section id="about" className="py-24 bg-white">
+                <div className="max-w-6xl mx-auto px-4">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-4">바이브 코딩이란 무엇인가요?</h2>
+                        <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+                            개발자가 아니어도 좋습니다. AI에게 원하는 기능을 말로 설명하면, AI가 대신 코드를 짜주는 혁신적인 개발 방식입니다.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {[
+                            { icon: "fa-solid fa-lightbulb", title: "1. 아이디어 기획", desc: "수업에 필요한 퀴즈 웹사이트나 명렬표 랜덤 뽑기 프로그램 등 필요한 아이디어를 떠올립니다." },
+                            { icon: "fa-solid fa-terminal", title: "2. 자연어 프롬프트 입력", desc: "'우리 반 학생 30명 랜덤 뽑기 웹페이지를 만들어줘'라고 AI에게 한국어로 지시합니다." },
+                            { icon: "fa-solid fa-display", title: "3. 결과물 확인 및 수정", desc: "AI가 만든 프로그램을 실행해보고, 원하는 디자인이나 규칙을 말로 계속 수정합니다." }
+                        ].map((step, idx) => (
+                            <div key={idx} className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition-colors border border-gray-100">
+                                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-6 text-blue-600">
+                                    <Icon name={step.icon} className="text-2xl" />
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
+                                <p className="text-gray-600 leading-relaxed">{step.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Benefits = () => (
+            <section id="benefits" className="py-24 bg-gray-900 text-white">
+                <div className="max-w-6xl mx-auto px-4">
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                        <div>
+                            <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+                                왜 학교 현장에 <br/><span className="text-blue-400">바이브 코딩</span>이 필요할까요?
+                            </h2>
+                            <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+                                행정 업무와 수업 준비로 바쁜 선생님들께 프로그래밍 문법은 큰 장벽입니다. 바이브 코딩은 선생님의 교육적 아이디어를 즉시 실현하는 가장 똑똑한 조수입니다.
+                            </p>
+                            <ul className="space-y-4">
+                                {[
+                                    "코딩 문법을 배울 필요 없는 압도적 편리함",
+                                    "내 수업 스타일에 딱 맞는 100% 맞춤형 교구 제작",
+                                    "반복적인 행정 업무 자동화 스크립트 생성",
+                                    "학생들의 창의력을 자극하는 새로운 수업 도구"
+                                ].map((item, i) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                        <Icon name="fa-solid fa-circle-check" className="text-blue-400 mt-1" />
+                                        <span className="text-gray-300 text-lg">{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl transform rotate-3 opacity-50 blur-lg"></div>
+                            <div className="relative bg-gray-800 p-8 rounded-2xl border border-gray-700 shadow-2xl">
+                                <div className="flex items-center gap-2 mb-4 border-b border-gray-700 pb-4">
+                                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <span className="text-gray-400 text-xs ml-2 font-mono">Teacher's Prompt</span>
+                                </div>
+                                <p className="text-blue-300 font-mono text-sm leading-relaxed mb-4">
+                                    "중학교 2학년 과학 '태양계' 단원 복습을 위한 방탈출 게임 웹페이지를 만들어줘. 행성 순서 퀴즈를 맞추면 힌트가 나오게 해줘."
+                                </p>
+                                <div className="bg-gray-900 rounded-lg p-4 font-mono text-[10px] text-green-400 border border-gray-700">
+                                    <p>{`> AI가 코드를 생성하고 있습니다...`}</p>
+                                    <p>{`> 15초 만에 나만의 태양계 방탈출 게임 완성!`}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Examples = () => (
+            <section id="examples" className="py-24 bg-blue-50">
+                <div className="max-w-6xl mx-auto px-4">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-4">선생님들의 실제 활용 사례</h2>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[
+                            { title: "인터랙티브 역사 지도", category: "수업 교구", desc: "연도별 클릭 시 역사적 사건이 팝업으로 뜨는 웹 지도" },
+                            { title: "모둠 편성 자동화 툴", category: "학급 운영", desc: "조건에 맞춘 원클릭 모둠 편성 프로그램" },
+                            { title: "영어 단어 플래시카드", category: "수업 교구", desc: "오답 노트 기능이 포함된 플래시카드 웹앱" },
+                            { title: "상담 기록 요약 봇", category: "업무 자동화", desc: "상담 내용을 핵심 키워드로 요약해주는 툴" },
+                            { title: "체육대회 대진표 생성기", category: "행사 운영", desc: "토너먼트 대진표 자동 생성 프로그램" },
+                            { title: "수학 함수 시뮬레이터", category: "수업 교구", desc: "함수 변화를 실시간으로 보여주는 웹 시뮬레이터" }
+                        ].map((ex, idx) => (
+                            <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full mb-3">
+                                    {ex.category}
+                                </span>
+                                <h3 className="text-lg font-bold text-gray-900 mb-2">{ex.title}</h3>
+                                <p className="text-gray-600 text-sm leading-relaxed">{ex.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+
+        const CallToAction = () => (
+            <section className="py-20 bg-blue-600 text-white text-center">
+                <div className="max-w-4xl mx-auto px-4">
+                    <Icon name="fa-solid fa-book-open" className="text-5xl mb-6 opacity-80" />
+                    <h2 className="text-3xl md:text-4xl font-bold mb-6">오션중학교와 함께 미래 교육을 시작하세요</h2>
+                    <button className="bg-white text-blue-700 px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all shadow-xl">
+                        바이브 코딩 교사 동아리 가입하기
+                    </button>
+                </div>
+            </section>
+        );
+
+        const Footer = () => {
+            const [imgError, setImgError] = useState(false);
+
+            return (
+                <footer className="bg-gray-50 border-t border-gray-200 py-12 text-center text-gray-500">
+                    <div className="max-w-6xl mx-auto px-4 flex flex-col items-center">
+                        {!imgError ? (
+                            <img 
+                                src="./images/logo.png" 
+                                alt="오션중학교 로고" 
+                                className="h-12 w-auto mb-4 grayscale opacity-70"
+                                onError={() => setImgError(true)}
+                            />
+                        ) : (
+                            <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 mb-4 shadow-inner">
+                                <Icon name="fa-solid fa-school" className="text-2xl" />
+                            </div>
+                        )}
+                        <p className="font-medium text-gray-700 mb-2">오션중학교 EduTech</p>
+                        <p className="text-sm">"선생님의 성장이 곧 학생의 성장입니다." - 오션중학교 교감 올림</p>
+                    </div>
+                </footer>
+            );
+        };
+
+        const App = () => (
+            <div className="min-h-screen">
+                <Header />
+                <Hero />
+                <About />
+                <Benefits />
+                <Examples />
+                <CallToAction />
+                <Footer />
+            </div>
+        );
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
