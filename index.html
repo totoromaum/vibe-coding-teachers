@@ -40,24 +40,27 @@
             return (
                 <header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
                     <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-                        <div className="flex items-center gap-3 text-blue-700 font-bold text-xl tracking-tight">
+                        <div className="flex items-center gap-3">
+                            {/* 로고 이미지 표시 (텍스트 삭제됨) */}
                             {!imgError ? (
                                 <img 
                                     src={logoPath}
                                     alt="오션중학교 로고" 
-                                    className="h-10 w-auto object-contain"
-                                    style={{ display: 'block', minWidth: '40px' }}
+                                    className="h-12 w-auto object-contain"
+                                    style={{ display: 'block' }}
                                     onError={(e) => {
                                         console.log("Logo load failed, switching to icon");
                                         setImgError(true);
                                     }}
                                 />
                             ) : (
-                                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-sm">
-                                    <Icon name="fa-solid fa-school" className="text-xl" />
+                                <div className="flex items-center gap-2 text-blue-700 font-bold text-xl tracking-tight">
+                                    <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-sm">
+                                        <Icon name="fa-solid fa-school" className="text-xl" />
+                                    </div>
+                                    <span className="text-gray-900">오션중학교</span>
                                 </div>
                             )}
-                            <span className="text-gray-900">오션중학교</span>
                         </div>
                         <nav className="hidden md:flex gap-6 text-gray-600 font-medium">
                             <a href="#about" className="hover:text-blue-600 transition-colors">바이브 코딩이란?</a>
